@@ -2,11 +2,11 @@
 
 **Prepare Environment**
 
-Install Git for Windows (Default Settings) https://gitforwindows.org/ - I propose to download and install Tortoisegit https://tortoisegit.org/download/
-Install Virtual Box (Default Settings, You can not use Hyper-V): https://download.virtualbox.org/virtualbox/6.1.14/VirtualBox-6.1.14-140239-Win.exe
+- Install Git for Windows (Default Settings) https://gitforwindows.org/ - I propose to download and install Tortoisegit https://tortoisegit.org/download/
+- Install Virtual Box (Default Settings, You can not use Hyper-V): https://download.virtualbox.org/virtualbox/6.1.14/VirtualBox-6.1.14-140239-Win.exe
   You can create a new Empty Virtual Machine and start it to see Bios - In this way you are sure that Hypervisor is running properly.
-Install Vagrant(Default Settings): https://releases.hashicorp.com/vagrant/2.2.10/vagrant_2.2.10_x86_64.msi
-Copy packer.exe from https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_windows_amd64.zip to c:\windows\system32
+- Install Vagrant(Default Settings): https://releases.hashicorp.com/vagrant/2.2.10/vagrant_2.2.10_x86_64.msi
+- Copy packer.exe from https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_windows_amd64.zip to c:\windows\system32
 
 **Test Environment**
 
@@ -30,5 +30,6 @@ vagrant box add ubuntu1804-vagrant.box
 
 
 **To DO**
+
 Test
 Change to newer Ubuntu (see iso definition "iso_urls" and "iso_checksum")
