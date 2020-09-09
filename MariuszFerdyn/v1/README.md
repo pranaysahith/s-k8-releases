@@ -11,25 +11,25 @@
 **Test Environment**
 
 Run command prompt as an admin to test if everything is installed correctly
-mkdir c:\vagranttst
-cd c:\vagranttst
-vagrant box add ubuntu/bionic64
-vagrant init ubuntu/bionic64
-vagrant up
-vagrant ssh
-exit
-vagrant halt
-packer -version
+- mkdir c:\vagranttst
+- cd c:\vagranttst
+- vagrant box add ubuntu/bionic64
+- vagrant init ubuntu/bionic64
+- vagrant up
+- vagrant ssh
+- exit
+- vagrant halt
+- packer -version
 
 **Build OVA**
 
-Clone Repository
-cd to repository Path
-packer build ova.json
-vagrant box add ubuntu1804-vagrant.box
+- Clone Repository
+- cd to repository Path
+- packer build ova.json
+- vagrant box add ubuntu1804-vagrant.box
 
 
 **To DO**
 
-Test
-Change to newer Ubuntu (see iso definition "iso_urls" and "iso_checksum")
+- Test
+- Change to newer Ubuntu (see iso definition "iso_urls" and "iso_checksum")
