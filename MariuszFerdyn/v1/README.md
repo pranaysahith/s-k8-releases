@@ -28,7 +28,8 @@ Run command prompt as an admin to test if everything is installed correctly
 - packer build ova.json
 - cd output
 - vagrant box add myova ubuntu-18.04.1.box
-- ToDo: Export box as OVA
+- vagrant init myova
+- vagrant up
 
 
 **To DO**
