@@ -34,5 +34,6 @@ Run command prompt as an admin to test if everything is installed correctly
 
 **To DO**
 
+- Seems that https://github.com/filetrust/k8-reverse-proxy/blob/master/upwork-devs/noureddine-yassin/reverse-proxy-icap/install.sh will not copy config files squid and nginx configuration files
 - Test
 - Change to newer Ubuntu (see iso definition "iso_urls" and "iso_checksum")
