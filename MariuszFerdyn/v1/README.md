@@ -28,7 +28,7 @@ Run command prompt as an admin to test if everything is installed correctly
 - packer build ova.json
 - cd output
 - vagrant box add myova ubuntu-18.04.1.box
-- you have imported myova to virtualbox that you can export
+- ToDo: Export box as OVA
 
 
 **To DO**
