@@ -17,7 +17,7 @@
         "inline": [
          "tar xzvf /tmp/revproxy.tar.gz",
          "cd reverse-proxy-icap-docker/",
-         "echo 'secret' | sudo -S -E docker-compose up -d"
+         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
          ]
     }],
     "builders": [
@@ -80,7 +80,16 @@
             "--cpus",
             "1"
           ]
-        ]
+        ],
+        "vboxmanage_post": [
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--nic2",
+            "hostonly"
+          ]
+       ]
+ 
       }
     ]
   }
