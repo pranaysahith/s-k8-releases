@@ -1,0 +1,22 @@
+@startuml
+!include <c4/C4_Container.puml>
+
+title Glass Wall OVA Cotainer Overview
+
+Person(client, Client, "A client for glasswall")
+
+System_Boundary(c1, "OVA") {
+    Container(nginx, Nginx, "Nginx Reverse Proxy", "Two Way URL rewrite")
+    Container(proxy, Proxy, "Squid Proxy", "Proxy the Files for the target website")
+}
+
+Container(icap_server, ICAP Server, "Cloud ICAP Server", "icap://gw-icap01.westeurope.azurecontainer.io/gw_rebuild")
+
+System(website, "Target Website", "Target Website to be proxied")
+
+Rel_Down(nginx, proxy, "Pass the Target Website for proxying")
+Rel_Down(client, nginx, "access target glasswall website")
+Rel(proxy, icap_server, "pass files through icap server for inspection")
+Rel(proxy, website, "access target website")
+
+@enduml
