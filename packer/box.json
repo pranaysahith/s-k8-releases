@@ -2,17 +2,24 @@
     "variables": {
       "version": ""
     },
-    "provisioners": [
-        {
-          "type": "shell",
-          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-          "script": "scripts/desktop.sh"
-        },
-    {
+    "provisioners": [{
         "type": "shell",
-        "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+        "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}' user",
         "script": "scripts/install.sh"
-      }],
+      },
+  {
+      "type": "file",
+      "source": "revproxy.tar.gz",
+      "destination":"/tmp/revproxy.tar.gz"
+  },
+  {
+        "type": "shell",
+        "inline": [
+         "tar xzvf /tmp/revproxy.tar.gz",
+         "cd reverse-proxy-icap-docker/",
+         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         ]
+    }],
     "builders": [
       {
         "type": "virtualbox-iso",
@@ -33,8 +40,8 @@
           " keyboard-configuration/layout=USA<wait>",
           " keyboard-configuration/variant=USA<wait>",
           " locale=en_US<wait>",
-          " netcfg/get_domain=vm<wait>",
-          " netcfg/get_hostname=vagrant<wait>",
+          " netcfg/get_domain=localdomain<wait>",
+          " netcfg/get_hostname=glasswall-proxy<wait>",
           " grub-installer/bootdev=/dev/sda<wait>",
           " noapic<wait>",
           " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
@@ -51,14 +58,15 @@
           "http://cdimage.ubuntu.com/ubuntu/releases/bionic/release/ubuntu-18.04.5-server-amd64.iso"
         ],
         "iso_checksum": "sha256:8c5fc24894394035402f66f3824beb7234b757dd2b5531379cb310cedfdf0996",
-        "ssh_username": "vagrant",
-        "ssh_password": "vagrant",
+        "ssh_username": "user",
+        "ssh_password": "secret",
         "ssh_port": 22,
         "ssh_wait_timeout": "1800s",
-        "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+        "shutdown_command": "echo 'secret'|sudo -S shutdown -P now",
         "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
         "virtualbox_version_file": ".vbox_version",
-        "vm_name": "packer-ubuntu-18.04-amd64",
+        "vm_name": "glasswall-proxy",
+        "format": "ova",
         "vboxmanage": [
           [
             "modifyvm",
@@ -72,7 +80,16 @@
             "--cpus",
             "1"
           ]
-        ]
+        ],
+        "vboxmanage_post": [
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--nic2",
+            "hostonly"
+          ]
+       ]
+ 
       }
     ]
   }
