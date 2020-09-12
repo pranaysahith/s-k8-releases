@@ -1,0 +1,15 @@
+@startuml
+!include <c4/C4_Context.puml>
+
+title Glass Wall OVA Context Overview
+
+Person(client, Client, "A client for glasswall")
+
+System(ova, "OVA", "Proxy Target Website for files inspection")
+
+System(website, "Target Website", "Target Website to be proxied")
+
+Rel_Down(client, ova, "access target glasswall website")
+Rel(ova, website, "access target website")
+
+@enduml
