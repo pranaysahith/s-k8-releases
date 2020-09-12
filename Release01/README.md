@@ -49,7 +49,9 @@ The page will pop up the warnings, ignore them all, and continue.
 
 - In case of error - Nonexisiting network choose a different network type for network adapter 1 and 2, save it and back for network adapter 1 - NAT and for network adapter 2 host only.
 - In case you experience any issues, in VirtualBox cmd try running:
-- sudo systemctl status docker
+``` bash
+sudo systemctl status docker
+```
 - make sure docker is running
 - If there is a need to bring docker up
 ``` bash
