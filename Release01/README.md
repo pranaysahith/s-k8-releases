@@ -89,16 +89,16 @@ Clone the Repo
 git clone https://github.com/filetrust/k8-ova.git
 ```
 
-Go to the `packer` Directory
+Go to the `Release01` Directory
 
 ``` bash
-cd k8-ova/packer
+cd k8-ova/Release01
 ```
 
 Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md - especially set correct ICAP server.
 
 ```bash
-git clone https://github.com/filetrust/k8-reverse-proxy
+git clone https://github.com/filetrust/k8-reverse-proxy.git
 ```
 
 make an archive from reverse-proxy-icap-docker folder
