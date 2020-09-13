@@ -108,7 +108,7 @@ del revproxy.tar.gz
 tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/
 ```
 
-The previous command doesn't work under Windows, so in this repo version, https://github.com/filetrust/k8-reverse-proxy/tree/cad5824e6a0e85cd6ebfbfedd79080eeb1af524d is included - revproxy.tar.gz (ICAP_URL=icap://20.54.208.58:1344/gw_rebuild).
+The previous command doesn't work under Windows, so in this repo version, https://github.com/filetrust/k8-reverse-proxy/tree/e4a5a5238a565fc82395d56d2388a80ce30375f8 is included - revproxy.tar.gz (ICAP_URL=icap://20.54.208.58:1344/gw_rebuild).
 
 Build the Image
 
