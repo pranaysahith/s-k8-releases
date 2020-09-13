@@ -15,7 +15,7 @@ reverse-proxy-icap-docker by NourEddineX and yassin
 
 ### USING RELEASE 1 OVA - FastTrack 
 
-- Download OVA file from: https://hcompl-my.sharepoint.com/:u:/g/personal/mariusz_ferdyn_h_com_pl/EaOCuPCAb9VGjL-Fk2KWK6sBvg1j5V0g-eiwOyNVXfisRA?e=I0x0a9
+- Download OVA file from: https://hcompl-my.sharepoint.com/:u:/g/personal/mariusz_ferdyn_h_com_pl/EaOCuPCAb9VGjL-Fk2KWK6sBvg1j5V0g-eiwOyNVXfisRA?e=oxl4zu
 - Open VirtualBox
 - Import downloaded OVA file: glasswal-proxy.ova
 
