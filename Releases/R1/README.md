@@ -1,6 +1,6 @@
-### RELEASE 1 OVA
+### RELEASE 0.1 OVA
 
-Release 1 includes the completed/tested pieces of the Reverse Proxy project as a "docker-compose script" to run inside an standard Ubuntu 18.04 server OVA image. The completed pieces of this project so far are:
+Release 0.1 includes the completed/tested pieces of the Reverse Proxy project as a "docker-compose script" to run inside an standard Ubuntu 18.04 server OVA image. The completed pieces of this project so far are:
 
 - Squid based reverse Proxy for a specific website.
 - Two Way URL rewrite/ with the help of NGINX in front of Squid.
