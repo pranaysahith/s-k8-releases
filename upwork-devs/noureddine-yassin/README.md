@@ -98,7 +98,7 @@ cd k8-ova/Release02
 Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
-git clone https://github.com/filetrust/k8-reverse-proxy.git
+git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
 ```
 
 make an archive from reverse-proxy-icap-docker folder
