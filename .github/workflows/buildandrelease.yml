@@ -2,11 +2,8 @@
 
 name: CI
 env:
-  REPOSITORY: glasswallicap.azurecr.io
-  IMAGE: icap-test
-  RESOURCE_GROUP: gw-gks-icap-squid-proxy
-  FQDN: glasswallicapcontainer
-  CONTAINER_NAME: icap-container
+ # REPOSITORY: glasswallicap.azurecr.io
+  
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
@@ -29,10 +26,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GW_SDK_TOKEN }} 
-        submodules: true
-
+  
     - run: |
         cat ${{ secrets.PRIVATE_KEY }} > /glasswall-priv.pem && chmod 400 /glasswall-priv.pem
         ssh -i /glasswall-priv.pem azureuser@51.140.118.3 'touch ~/pipeline-test'
