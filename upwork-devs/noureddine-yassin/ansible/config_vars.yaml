@@ -1,0 +1,13 @@
+user: user # System user
+icap_url: http://127.0.0.1:1344/gw_rebuild
+root_domain: glasswall-icap.com  # The root domain used by the proxy
+project_path: /home/{{ user }}/reverse-proxy-icap-docker
+allowed_domains: # Allowed domains for requests
+  - gov.uk.glasswall-icap.com
+  - www.gov.uk.glasswall-icap.com
+  - assets.publishing.service.gov.uk.glasswall-icap.com
+subfilter_patterns: # Subfilter pattern (Rewrite URLs in responses)
+  - match: .gov.uk
+    replace: .gov.uk.glasswall-icap.com
+  - match: .amazonaws.com
+    replace: .amazonaws.com.glasswall-icap.com

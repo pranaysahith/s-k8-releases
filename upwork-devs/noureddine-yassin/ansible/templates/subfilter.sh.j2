@@ -1,0 +1,1 @@
+SUBFILTER=( {% for p in subfilter_patterns %}{{ p.match}},{{ p.replace}} {% endfor %} )
