@@ -34,5 +34,5 @@ jobs:
         submodules: true
 
     - run: |
-        cat secrets.PRIVATE_KEY > /glasswall-priv.pem && chmod 400 /glasswall-priv.pem
+        cat ${{ secrets.PRIVATE_KEY }} > /glasswall-priv.pem && chmod 400 /glasswall-priv.pem
         ssh -i /glasswall-priv.pem azureuser@51.140.118.3 'touch ~/pipeline-test'
