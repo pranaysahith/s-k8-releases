@@ -30,5 +30,4 @@ jobs:
     - name: test 
       run: |
         echo test 
-        echo ${{ secrets.PRIVATE_KEY }} | tr -d '\r' | ssh-add - > /dev/null || true
         ssh azureuser@51.140.118.3 'touch ~/pipeline-test' || true 
