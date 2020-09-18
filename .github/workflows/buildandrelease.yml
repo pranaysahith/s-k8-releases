@@ -29,5 +29,7 @@ jobs:
   
     - run: |
         echo ${{ secrets.PRIVATE_KEY }} | tr -d '\r' | ssh-add - > /dev/null
-       # echo ${{ secrets.PRIVATE_KEY }} > /glasswall-priv.pem && chmod 400 /glasswall-priv.pem
         ssh -i /glasswall-priv.pem azureuser@51.140.118.3 'touch ~/pipeline-test'
+
+#echo ${{ secrets.PRIVATE_KEY }} > /glasswall-priv.pem && chmod 400 /glasswall-priv.pem
+       
