@@ -27,10 +27,12 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
   
-    - name: test 
-      run: |
-        echo test 
-        mkdir -p "~/.ssh" && chmod 700 "~/.ssh"
-        ssh-keyscan 51.140.118.3 >> "~/.ssh/known_hosts"
-        chmod 644 ~/.ssh/known_hosts
-        ssh azureuser@51.140.118.3 'touch ~/pipeline-test' || true 
+   - name: multiple command
+     uses: appleboy/ssh-action@master
+     with:
+       host: ${{ secrets.SSH_HOST }}
+       username: ${{ secrets.SSH_USERNAME }}
+       key: ${{ secrets.PRIVATE_KEY }}
+       script: |
+          
+
