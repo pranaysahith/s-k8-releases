@@ -30,4 +30,6 @@ jobs:
     - name: test 
       run: |
         echo test 
+        ssh-keyscan 51.140.118.3 >> ~/.ssh/known_hosts
+        chmod 644 ~/.ssh/known_hosts
         ssh azureuser@51.140.118.3 'touch ~/pipeline-test' || true 
