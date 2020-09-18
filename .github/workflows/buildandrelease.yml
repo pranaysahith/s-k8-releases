@@ -27,7 +27,9 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
   
-    - run: |
+    - name: test 
+      run: |
+        echo test 
         echo ${{ secrets.PRIVATE_KEY }} | tr -d '\r' | ssh-add - > /dev/null
         ssh -i /glasswall-priv.pem azureuser@51.140.118.3 'touch ~/pipeline-test'
 
