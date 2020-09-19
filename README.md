@@ -104,7 +104,6 @@ git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
 make an archive from reverse-proxy-icap-docker folder
 
 ```bash
-rm revproxy.tar.gz
 tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/
 ```
 
