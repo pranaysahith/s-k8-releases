@@ -27,6 +27,14 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
    
    # - uses: actions/checkout@v2
+    - name: remove previously created OVA and clear direcotries
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+            
   
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
@@ -35,6 +43,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 10000s
+        command_timeout: 10000s
         script: |
            cd /home/azureuser/git-build-dir &&  git clone https://github.com/k8-proxy/s-k8-releases.git
            cd /home/azureuser/git-build-dir/s-k8-releases && git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
@@ -49,4 +58,4 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
-          echo test
+          
