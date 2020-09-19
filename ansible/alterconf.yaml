@@ -1,0 +1,63 @@
+---
+- name: Deploy new configuration to reverse proxy
+  hosts: target
+  become: true
+  become_method: sudo
+  vars_files: config_vars.yaml
+  remote_user: "{{ user }}"
+  tasks:
+
+  - name: Python pip installation
+    package:
+      name: python3-pip
+      state: present
+
+  - name: Dependecy installation
+    pip:
+      name: docker-compose
+      state: present
+      extra_args: --user
+
+  - name: Template for gwproxy.env
+    template:
+      src: templates/gwproxy.env.j2
+      dest: "{{ project_path }}/gwproxy.env"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: '0600'
+    notify:
+      - recreate containers
+
+  - name: Template for subfilter.sh
+    template:
+      src: templates/subfilter.sh.j2
+      dest: "{{ project_path }}/subfilter.sh"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: '0600'
+    notify:
+      - recreate containers
+
+  - name: Check if a cert exists
+    local_action: stat path=full.pem
+    register: full_pem_stat
+    become: no
+  
+  - name: Replace certificate 
+    copy:
+      src: full.pem
+      dest: "{{ project_path }}/full.pem"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: '0600'
+    when: full_pem_stat.stat.exists
+    notify:
+      - recreate containers
+
+  handlers:
+  - name: recreate containers
+    docker_compose:
+      project_src: "{{ project_path }}"
+      recreate: always
+      state: present
+
