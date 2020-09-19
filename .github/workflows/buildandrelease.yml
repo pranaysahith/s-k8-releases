@@ -34,7 +34,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
-        timeout: 1000
+        timeout: 1000s
         script: |
            cd /home/azureuser/git-build-dir &&  git clone https://github.com/k8-proxy/s-k8-releases.git
            cd /home/azureuser/git-build-dir/s-k8-releases && git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
