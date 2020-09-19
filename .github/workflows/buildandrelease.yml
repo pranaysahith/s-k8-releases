@@ -27,12 +27,15 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
   
-   - name: multiple command
-     uses: appleboy/ssh-action@master
-     with:
-       host: ${{ secrets.SSH_HOST }}
-       username: ${{ secrets.SSH_USERNAME }}
-       key: ${{ secrets.PRIVATE_KEY }}
-       script: |
-          
+    - name: multiple command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+           git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
+           tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/
+
+
 

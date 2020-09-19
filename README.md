@@ -1,26 +1,11 @@
-### RELEASE 0.1 OVA
+### RELEASE 1 OVA
 
-Release 0.1 includes the completed/tested pieces of the Reverse Proxy project as a "docker-compose script" to run inside an standard Ubuntu 18.04 server OVA image. The completed pieces of this project so far are:
+Release 1 includes the completed/tested pieces of the Reverse Proxy project as a "reverse-proxy-icap-docker" to run inside a standard Ubuntu 18.04 server OVA image. The completed pieces of this project so far are:
 
 - Squid based reverse Proxy for a specific website.
 - Two Way URL rewrite/ with the help of NGINX in front of Squid.
 - SSL termination.
-- ICAP integration (icap://gw-icap01.westeurope.azurecontainer.io/gw_rebuild)
-
-## Instructions:
-- Download the OVA http://51.11.8.179:1234/glasswall-proxy.ova
-- Import it to VirtualBox , open settings, choose the network for network adapter 2
-- system credentials:
-username: user
-password: secret
-- check the ip address of eth1, add it your hosts files as follows
-
-  `1.2.3.4 assets.publishing.service.gov.uk.glasswall-icap.com`
-
-  `1.2.3.4 gov.uk.glasswall-icap.com`
-
-  `1.2.3.4 www.gov.uk.glasswall-icap.com `
-
+- ICAP integration
 
 **Credits**
 
@@ -104,26 +89,26 @@ Clone the Repo
 git clone https://github.com/filetrust/k8-ova.git
 ```
 
-Go to the `Release01` Directory
+Go to the `Release02` Directory
 
 ``` bash
-cd k8-ova/Release01
+cd k8-ova/Release02
 ```
 
-Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md - especially set correct ICAP server.
+Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
-git clone https://github.com/filetrust/k8-reverse-proxy.git
+git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
 ```
 
 make an archive from reverse-proxy-icap-docker folder
 
 ```bash
 rm revproxy.tar.gz
-tar czvf revproxy.tar.gz -C k8-reverse-proxy/Release01/ reverse-proxy-icap-docker/
+tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/
 ```
 
-The previous command doesn't work under Windows, so in this repo version, https://github.com/filetrust/k8-reverse-proxy/tree/e4a5a5238a565fc82395d56d2388a80ce30375f8 is included - revproxy.tar.gz.
+The previous command doesn't work under Windows, so it's included prepackages in [this commit](https://github.com/filetrust/k8-reverse-proxy/tree/980a7b385e54cbd97dde4b5358487e4b807a982a).
 
 Build the Image
 
@@ -134,4 +119,3 @@ packer build box.json
 After Successful build
 
 Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
-
