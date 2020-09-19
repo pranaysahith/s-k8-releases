@@ -34,7 +34,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
-            
+           rm -rf /home/azureuser/VirtualBox\ VMs/glasswall-proxy/ 
   
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
@@ -58,4 +58,6 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
+           mv glasswall-proxy.ova glasswall-proxy-Release0.2.ova
+           aws s3 cp glasswall-proxy-Release0.2.ova s3://glasswall-proxy-ova/
           
