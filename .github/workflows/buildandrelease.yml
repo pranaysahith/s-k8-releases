@@ -37,5 +37,5 @@ jobs:
         script: |
            cd /home/azureuser/gitlab-build-dir &&  git clone https://github.com/k8-proxy/s-k8-releases.git
            cd /home/azureuser/gitlab-build-dir/s-k8-releases && git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
-           cd /home/azureuser/gitlab-build-dir/s-k8-releases && tar czvf revproxy.tar.gz -C k8-reverse-proxy/ reverse-proxy-icap-docker/
-           cd /home/azureuser/gitlab-build-dir/s-k8-releases && packer build json
+           cd /home/azureuser/gitlab-build-dir/s-k8-releases && tar czvf revproxy.tar.gz -C /home/azureuser/gitlab-build-dir/s-k8-releases/k8-reverse-proxy/ /home/azureuser/gitlab-build-dir/s-k8-releases/reverse-proxy-icap-docker/
+           cd /home/azureuser/gitlab-build-dir/s-k8-releases && packer build box.json
