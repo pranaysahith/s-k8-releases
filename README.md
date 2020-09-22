@@ -1,21 +1,24 @@
-# OVA Releases
+# Releases
 
 
 ### Table of Contents
 * **[Releases](#Releases)**
-* **[Importing OVA](#Importing-OVA)**
+* **[Importing the OVA](#Importing-OVA)**
 * **[Building the OVA](#Building-the-OVA)**
+* **[Building the AMI](#Building-the-AMI)**
+* **[Continous Integration](#Continous-Integration)**
+
 
 
 ### Releases
 
 You can check the releases part in the repo for the release notes and the S3 link to the created OVA.
 
-By default we have a release every Thursday and it's automated using Github actions (refer to the CI/CD part for more info).
+By default we have a release every week and it's automated using Github actions (refer to the CI/CD part for more info).
 
 
 
-### Importing OVA
+### Importing the OVA
 
 - Download OVA file from: https://hcompl-my.sharepoint.com/:u:/g/personal/mariusz_ferdyn_h_com_pl/EaOCuPCAb9VGjL-Fk2KWK6sBvg1j5V0g-eiwOyNVXfisRA?e=oxl4zu
 - Open VirtualBox
@@ -104,14 +107,6 @@ Clone the reverse proxy repo and tweak configuration files as described in k8-re
 git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
 
 ```
-
-make an archive from reverse-proxy icap repo
-
-```bash
-tar czvf revproxy.tar.gz -C k8-reverse-proxy/stable-src .
-```
-
-The previous command doesn't work under Windows, so it's included prepackages in [this commit](https://github.com/filetrust/k8-reverse-proxy/tree/980a7b385e54cbd97dde4b5358487e4b807a982a).
 
 Build the Image
 
