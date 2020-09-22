@@ -54,7 +54,6 @@ jobs:
         timeout: 10000s
         command_timeout: 10000s
         script: |
-           cd ${{ env.BUILD_DIR }} &&  git clone https://github.com/k8-proxy/s-k8-releases
            cd ${{ env.BUILD_DIR }}/s-k8-releases && git clone --recursive git@github.com:NourEddineX/k8-reverse-proxy.git
            packer build box.json 
 
