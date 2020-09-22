@@ -149,6 +149,13 @@ git clone --single-branch --branch develop --recursive https://github.com/k8-pro
 
 ```
 
+Create an archive from reverse-proxy icap repo
+
+```bash
+tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/	tar czvf revproxy.tar.gz -C k8-reverse-proxy/stable-src .
+```
+
+
 Build the Image
 
 ``` bash
