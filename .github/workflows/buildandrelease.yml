@@ -27,15 +27,6 @@ jobs:
       with:
         path: s-k8-releases
 
-    - name: copy code to the server
-      uses: garygrossgarten/github-action-scp@release
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        privateKey: ${{ secrets.PRIVATE_KEY }}
-        local: ${{ github.workspace }}/s-k8-releases
-        remote: ${{ env.BUILD_DIR }}
-
     - name: remove previously created OVA and clear direcotries
       uses: appleboy/ssh-action@master
       with:
@@ -45,6 +36,15 @@ jobs:
         script: |
            rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.BUILD_DIR }}/*
   
+    - name: copy code to the server
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        privateKey: ${{ secrets.PRIVATE_KEY }}
+        local: ${{ github.workspace }}/s-k8-releases
+        remote: ${{ env.BUILD_DIR }}
+
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
       with:
