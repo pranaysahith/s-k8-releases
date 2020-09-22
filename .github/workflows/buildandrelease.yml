@@ -1,9 +1,10 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI
-#env:
- # REPOSITORY: glasswallicap.azurecr.io
-  
+env:
+  BUILD_DIR: "/home/azureuser/git-build-dir"
+  OUTPUT_DIR:  "output-virtualbox-iso"
+  VIRTUAL_BOX_PATH: /home/azureuser/VirtualBox\ VMs/glasswall-proxy/
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
@@ -34,7 +35,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
-           rm -rf /home/azureuser/VirtualBox\ VMs/glasswall-proxy/ 
+           rm -rf ${{ env.VIRTUAL_BOX_PATH }} 
   
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
@@ -45,10 +46,10 @@ jobs:
         timeout: 10000s
         command_timeout: 10000s
         script: |
-           cd /home/azureuser/git-build-dir &&  git clone https://github.com/k8-proxy/s-k8-releases.git
-           cd /home/azureuser/git-build-dir/s-k8-releases && git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
-           tar czvf revproxy.tar.gz -C /home/azureuser/git-build-dir/s-k8-releases/k8-reverse-proxy/ /home/azureuser/git-build-dir/s-k8-releases/reverse-proxy-icap-docker/
-           packer build -force box.json 
+           cd ${{ env.BUILD_DIR }} &&  git clone https://github.com/k8-proxy/s-k8-releases
+           cd ${{ env.BUILD_DIR }}/s-k8-releases && git clone --recursive git@github.com:NourEddineX/k8-reverse-proxy.git
+           tar czvf revproxy.tar.gz -C ${{ env.BUILD_DIR }}/s-k8-releases/k8-reverse-proxy/stable-src/ .
+           packer build box.json 
 
     - name: Upload the OVA to S3
       uses: appleboy/ssh-action@master
@@ -58,6 +59,6 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
-           mv glasswall-proxy.ova glasswall-proxy-Release0.2.ova
-           aws s3 cp glasswall-proxy-Release0.2.ova s3://glasswall-proxy-ova/
+           mv ${{ env.OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
+           aws s3 cp ${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
           
