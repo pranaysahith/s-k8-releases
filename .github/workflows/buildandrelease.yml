@@ -35,7 +35,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
-           rm -rf ${{ env.VIRTUAL_BOX_PATH }} 
+           rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.BUILD_DIR }}/*
   
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
