@@ -29,3 +29,5 @@ EOF
 
 sudo apt autoclean
 sudo apt clean all
+
+mkdir -p /home/user/reverse-proxy-icap-docker

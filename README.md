@@ -122,6 +122,14 @@ Import the OVA file by going into the `output-virtualbox-iso` and Import the Ima
 
 ### Building the AMI
 
+To create an AMI image with packer, you will need a programmatic access and a user with sufficient privileges. 
+
+For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
+
+You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+
+Once you have done connecting your AWS account then we are ready to go for the next steps
+
 Clone the Repo
 
 ``` bash
@@ -147,4 +155,4 @@ Build the Image
 packer build ami.json
 ```
 
-After Successful build
+
