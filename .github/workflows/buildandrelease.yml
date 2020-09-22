@@ -23,7 +23,19 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
    
-   # - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+
+    - name: copy code to the server
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.PRIVATE_KEY }}
+        local: s-k8-releases
+        remote: ${{ env.BUILD_DIR }}
+
+        source: "tests/a.txt,tests/b.txt"
+        target: "test"    
     - name: remove previously created OVA and clear direcotries
       uses: appleboy/ssh-action@master
       with:
