@@ -117,3 +117,34 @@ packer build box.json
 After Successful build
 
 Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
+
+
+
+### Building the AMI
+
+Clone the Repo
+
+``` bash
+git clone https://github.com/k8-proxy/s-k8-releases
+```
+
+Change directory to the cloned project
+
+``` bash
+cd s-k8-releases/
+```
+
+Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+
+```bash
+git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+
+```
+
+Build the Image
+
+``` bash
+packer build ami.json
+```
+
+After Successful build

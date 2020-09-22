@@ -10,7 +10,7 @@
   {
       "type": "file",
       "source": "k8-reverse-proxy/stable-src/",
-      "destination":"/home/user/reverse-proxy-icap-docker/"
+      "destination":"/home/user/reverse-proxy-icap-docker"
   },
   {
         "type": "shell",
