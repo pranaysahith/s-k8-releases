@@ -12,10 +12,6 @@ on:
     branches: [ master ]
     paths-ignore: 
       - 'diagrams/**'
-  pull_request:
-    branches: [ master ]
-    paths-ignore: 
-      - 'diagrams/**'    
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:   
@@ -59,6 +55,6 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
-           mv ${{ env.OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
-           aws s3 cp ${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
+           mv ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
+           aws s3 cp ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
           
