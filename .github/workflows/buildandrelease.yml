@@ -24,7 +24,8 @@ jobs:
 
     # Checks-out your repository under $GITHUB_WORKSPACE/s-k8-releases, so your job can access it  
     - uses: actions/checkout@v2
-      path: s-k8-releases
+      with:
+        path: s-k8-releases
 
     - name: copy code to the server
       uses: garygrossgarten/github-action-scp@release
