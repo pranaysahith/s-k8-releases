@@ -32,7 +32,7 @@ jobs:
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.PRIVATE_KEY }}
+        privateKey: ${{ secrets.PRIVATE_KEY }}
         local: ${{ github.workspace }}/s-k8-releases
         remote: ${{ env.BUILD_DIR }}
 
