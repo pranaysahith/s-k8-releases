@@ -35,6 +35,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
            rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.BUILD_DIR }}/*
+           
   
     - name: copy code to the server
       uses: garygrossgarten/github-action-scp@release
@@ -43,7 +44,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         privateKey: ${{ secrets.PRIVATE_KEY }}
         local: ${{ github.workspace }}/s-k8-releases
-        remote: ${{ env.BUILD_DIR }}
+        remote: ${{ env.BUILD_DIR }}/s-k8-releases
 
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
