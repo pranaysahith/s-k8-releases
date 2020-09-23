@@ -1,19 +1,24 @@
-### RELEASE 1 OVA
-
-Release 1 includes the completed/tested pieces of the Reverse Proxy project as a "reverse-proxy-icap-docker" to run inside a standard Ubuntu 18.04 server OVA image. The completed pieces of this project so far are:
-
-- Squid based reverse Proxy for a specific website.
-- Two Way URL rewrite/ with the help of NGINX in front of Squid.
-- SSL termination.
-- ICAP integration
-
-**Credits**
-
-OVA Packer scripts by NourEddineX
-reverse-proxy-icap-docker by NourEddineX and yassin
+# Releases
 
 
-### USING RELEASE 1 OVA - FastTrack 
+### Table of Contents
+* **[Releases](#Releases)**
+* **[Importing the OVA](#Importing-OVA)**
+* **[Building the OVA](#Building-the-OVA)**
+* **[Building the AMI](#Building-the-AMI)**
+* **[Continous Integration](#Continous-Integration)**
+
+
+
+### Releases
+
+You can check the releases part in the repo for the release notes and the S3 link to the created OVA.
+
+By default we have a release every week and it's automated using Github actions (refer to the CI/CD part for more info).
+
+
+
+### Importing the OVA
 
 - Download OVA file from: https://hcompl-my.sharepoint.com/:u:/g/personal/mariusz_ferdyn_h_com_pl/EaOCuPCAb9VGjL-Fk2KWK6sBvg1j5V0g-eiwOyNVXfisRA?e=oxl4zu
 - Open VirtualBox
@@ -67,8 +72,9 @@ docker-compose up -d --force-recreate squid
 sudo reboot
 ```
 
+### Building the OVA
 
-### Create OVA with docker-compose container from https://github.com/filetrust/k8-reverse-proxy/tree/master/upwork-devs/noureddine-yassin/reverse-proxy-icap-docker
+ docker-compose container from https://github.com/filetrust/k8-reverse-proxy/tree/master/upwork-devs/noureddine-yassin/reverse-proxy-icap-docker
 
 **Prepare Environment**
 
@@ -86,28 +92,21 @@ sudo reboot
 Clone the Repo
 
 ``` bash
-git clone https://github.com/filetrust/k8-ova.git
+git clone https://github.com/k8-proxy/s-k8-releases
 ```
 
-Go to the `Release02` Directory
+Change directory to the cloned project
 
 ``` bash
-cd k8-ova/Release02
+cd s-k8-releases/
 ```
 
 Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
-git clone --recursive https://github.com/filetrust/k8-reverse-proxy.git
+git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+
 ```
-
-make an archive from reverse-proxy-icap-docker folder
-
-```bash
-tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/
-```
-
-The previous command doesn't work under Windows, so it's included prepackages in [this commit](https://github.com/filetrust/k8-reverse-proxy/tree/980a7b385e54cbd97dde4b5358487e4b807a982a).
 
 Build the Image
 
@@ -118,3 +117,49 @@ packer build box.json
 After Successful build
 
 Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
+
+
+
+### Building the AMI
+
+To create an AMI image with packer, you will need a programmatic access and a user with sufficient privileges. 
+
+For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
+
+You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+
+Once you have done connecting your AWS account then we are ready to go for the next steps
+
+Clone the Repo
+
+``` bash
+git clone https://github.com/k8-proxy/s-k8-releases
+```
+
+Change directory to the cloned project
+
+``` bash
+cd s-k8-releases/
+```
+
+Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+
+```bash
+git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+
+```
+
+Create an archive from reverse-proxy icap repo
+
+```bash
+tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/	tar czvf revproxy.tar.gz -C k8-reverse-proxy/stable-src .
+```
+
+
+Build the Image
+
+``` bash
+packer build ami.json
+```
+
+
