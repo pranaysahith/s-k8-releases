@@ -3,7 +3,7 @@
 name: CI
 env:
   BUILD_DIR: "/home/azureuser/git-build-dir"
-  OUTPUT_DIR:  "output-virtualbox-iso"
+  OUTPUT_DIR:  "output-virtualbox-ovf"
   VIRTUAL_BOX_PATH: /home/azureuser/VirtualBox\ VMs/glasswall-proxy/
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -57,7 +57,7 @@ jobs:
         script: |
            cd ${{ env.BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
            tar czvf revproxy.tar.gz -C ${{ env.BUILD_DIR }}/s-k8-releases/k8-reverse-proxy/stable-src/ .
-           packer build box.json 
+           packer build reverse-proxy.json 
 
     - name: Upload the OVA to S3
       uses: appleboy/ssh-action@master

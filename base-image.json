@@ -6,22 +6,8 @@
         "type": "shell",
         "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}' user",
         "script": "scripts/install.sh"
-      },
-  {
-      "type": "file",
-      "source": "revproxy.tar.gz",
-      "destination":"/tmp/revproxy.tar.gz"
-  },
-  {
-        "type": "shell",
-        "inline": [
-         "mkdir reverse-proxy-icap-docker/",
-         "cd reverse-proxy-icap-docker/",
-         "tar xzvf /tmp/revproxy.tar.gz",
-         "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
-        "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
-         ]
-    }],
+      }
+    ],
     "builders": [
       {
         "type": "virtualbox-iso",
@@ -67,7 +53,7 @@
         "shutdown_command": "echo 'secret'|sudo -S shutdown -P now",
         "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
         "virtualbox_version_file": ".vbox_version",
-        "vm_name": "glasswall-proxy",
+        "vm_name": "glasswall-proxy-base-image",
         "format": "ova",
         "vboxmanage": [
           [
@@ -82,16 +68,8 @@
             "--cpus",
             "1"
           ]
-        ],
-        "vboxmanage_post": [
-          [
-            "modifyvm",
-            "{{.Name}}",
-            "--nic2",
-            "hostonly"
-          ]
-       ]
- 
+        ]
       }
     ]
   }
+
