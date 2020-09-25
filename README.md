@@ -6,7 +6,7 @@
 * **[Importing the OVA](#Importing-OVA)**
 * **[Cloning the Repo](#Cloning-the-Repo)**
 * **[Building the OVA](#Building-the-OVA)**
-* **[Building the AMI](#Building-the-AMI)**
+* **[Building AWS AMI](#Building-AWS-AMI)**
 * **[Continous Integration](#Continous-Integration)**
 
 
@@ -90,9 +90,9 @@ We need to create a base image to use it for the OVA new code deployment to fast
 
 #### Steps 
 
-Clone the Repo as described **[here](#Cloning-the-Repo)**
+* Clone the Repo as described **[here](#Cloning-the-Repo)**
 
-And then build the image
+* And then build the image
 
 ``` bash
 packer build base-image.json
@@ -116,47 +116,43 @@ packer build base-image.json
 
 #### Build Steps
 
-Clone the Repo as described **[here](#Cloning-the-Repo)** ** You can skip this if you already cloned the repo in the base image section**
+* Clone the Repo as described **[here](#Cloning-the-Repo)** ** You can skip this if you already cloned the repo in the base image section**
 
-Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+* Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
 git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
 
 ```
 
-Build the Image
+* Build the Image
 
 ``` bash
 packer build reverse-proxy.json
 ```
 
-After Successful build
-
-Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
+* After Successful build, Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
 
 
 
-### Building the AMI
+### Building AWS AMI
 
-To create an AMI image with packer, you will need a programmatic access and a user with sufficient privileges. 
+* To create an AMI image with packer, you need a user with programmatic access and sufficient privileges. 
 
-For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
+    * For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
 
-You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+    * You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
 
-Once you have done connecting your AWS account then we are ready to go for the next steps
+* Then you need to clone the Repo as described **[here](#Cloning-the-Repo)**
 
-Clone the Repo as described **[here](#Cloning-the-Repo)**
-
-Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+* Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
 git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
 
 ```
 
-Build the Image
+* Build the Image
 
 ``` bash
 packer build ami.json
