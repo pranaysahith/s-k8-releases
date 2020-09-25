@@ -98,7 +98,16 @@ We need to create a base image to use it for the OVA new code deployment to fast
 packer build base-image.json
 ```
 
-**Note:** This step can be skipped if you previously created this on the same machine you are using i.e You already have the base image.
+* Create MD5sum for the produced image
+
+``` bash
+md5sum output-virtualbox-iso/glasswall-proxy-base-image.ova
+
+```
+* Capture the produced hash and replace checksum field with the new one in the reverse-proxy.json.
+
+
+**Note:** This step can be skipped if you previously created this on the same machine you are using i.e You already created the base image or downloaded it.
 
 ### Building the OVA
 
@@ -116,7 +125,7 @@ packer build base-image.json
 
 #### Build Steps
 
-* Clone the Repo as described **[here](#Cloning-the-Repo)** ** You can skip this if you already cloned the repo in the base image section**
+* Clone the Repo as described **[here](#Cloning-the-Repo)** **You can skip this if you already cloned the repo in the base image section**
 
 * Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
