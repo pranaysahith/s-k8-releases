@@ -2,8 +2,9 @@
 
 name: CI
 env:
-  BUILD_DIR: "/home/azureuser/git-build-dir"
-  OUTPUT_DIR:  "output-virtualbox-ovf"
+  OVA_BUILD_DIR: "/home/azureuser/git-build-dir"
+  AMI_BUILD_DIR: "/home/azureuser/git-build-dir-ami"
+  OVA_OUTPUT_DIR:  "output-virtualbox-ovf"
   VIRTUAL_BOX_PATH: /home/azureuser/VirtualBox\ VMs/glasswall-proxy/
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -15,7 +16,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:   
-  build-and-release:
+  build-and-release-ova:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -34,9 +35,8 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
-           rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.BUILD_DIR }}/*
+           rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.OVA_BUILD_DIR }}/*
 
-  
     - name: copy code to the server
       uses: garygrossgarten/github-action-scp@release
       with:
@@ -44,7 +44,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         privateKey: ${{ secrets.PRIVATE_KEY }}
         local: ${{ github.workspace }}/s-k8-releases
-        remote: ${{ env.BUILD_DIR }}/s-k8-releases
+        remote: ${{ env.OVA_BUILD_DIR }}/s-k8-releases
 
     - name: Build the OVA on a remote VM
       uses: appleboy/ssh-action@master
@@ -55,7 +55,7 @@ jobs:
         timeout: 10000s
         command_timeout: 10000s
         script: |
-           cd ${{ env.BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+           cd ${{ env.OVA_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
            packer build reverse-proxy.json 
 
     - name: Upload the OVA to S3
@@ -66,6 +66,48 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
-           mv ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
-           aws s3 cp ${{ env.BUILD_DIR }}/s-k8-releases/${{ env.OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
+           mv ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
+           aws s3 cp ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
           
+  build-and-release-AMI:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE/s-k8-releases, so your job can access it  
+    - uses: actions/checkout@v2
+      with:
+        path: s-k8-releases
+
+    - name: remove previously created AMI direcotries
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+           rm -rf ${{ env.AMI_BUILD_DIR }}/*
+
+  
+    - name: copy code to the server
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        privateKey: ${{ secrets.PRIVATE_KEY }}
+        local: ${{ github.workspace }}/s-k8-releases
+        remote: ${{ env.AMI_BUILD_DIR }}/s-k8-releases
+
+    - name: Build the AMI on a remote VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        timeout: 10000s
+        command_timeout: 10000s
+        script: |
+           cd ${{ env.AMI_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+           packer build aws-ami.json
