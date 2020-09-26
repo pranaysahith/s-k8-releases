@@ -110,4 +110,4 @@ jobs:
         command_timeout: 10000s
         script: |
            cd ${{ env.AMI_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
-           packer build aws-ami.json
+           packer build -var github_sha=${{ github.sha }} aws-ami.json

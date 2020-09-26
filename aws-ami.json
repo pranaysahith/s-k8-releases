@@ -2,12 +2,13 @@
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "region": "eu-west-2"
+    "region": "eu-west-2",
+    "github_sha": null
   },
   "builders": [
     {
       "access_key": "{{user `aws_access_key`}}",
-      "ami_name": "glasswall-reverseproxy-{{timestamp}}",
+      "ami_name": "glasswall-reverseproxy-{{user `github_sha`}}",
       "instance_type": "t2.large",
       "region": "{{user `region`}}",
       "secret_key": "{{user `aws_secret_key`}}",
