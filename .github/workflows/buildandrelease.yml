@@ -111,4 +111,4 @@ jobs:
         script: |
            cd ${{ env.AMI_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
            packer build -var github_sha=${{ github.sha }} aws-ami.json
-           aws ec2 run-instances --image-id `aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github_sha }}" --query 'Images[*].[ImageId]' --output text` --count 1 --instance-type t2.large --key-name ~/.ssh/releases-repo-key.pem --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
+           aws ec2 run-instances --image-id `aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github.sha }}" --query 'Images[*].[ImageId]' --output text` --count 1 --instance-type t2.large --key-name ~/.ssh/releases-repo-key.pem --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
