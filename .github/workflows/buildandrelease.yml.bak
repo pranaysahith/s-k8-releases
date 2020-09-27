@@ -16,6 +16,58 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:   
+  build-and-release-ova:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE/s-k8-releases, so your job can access it  
+    - uses: actions/checkout@v2
+      with:
+        path: s-k8-releases
+
+    - name: remove previously created OVA and clear direcotries
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+           rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.OVA_BUILD_DIR }}/*
+
+    - name: copy code to the server
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        privateKey: ${{ secrets.PRIVATE_KEY }}
+        local: ${{ github.workspace }}/s-k8-releases
+        remote: ${{ env.OVA_BUILD_DIR }}/s-k8-releases
+
+    - name: Build the OVA on a remote VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        timeout: 10000s
+        command_timeout: 10000s
+        script: |
+           cd ${{ env.OVA_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
+           packer build reverse-proxy.json 
+
+    - name: Upload the OVA to S3
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        timeout: 1000s
+        script: |
+           mv ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
+           aws s3 cp ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
           
   build-and-release-AMI:
     # The type of runner that the job will run on
@@ -70,5 +122,4 @@ jobs:
         timeout: 10000s
         command_timeout: 10000s
         script: |
-           echo $AMI_ID
            aws ec2 run-instances --image-id $AMI_ID --count 1 --instance-type t2.large --key-name releases-repo-key --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
