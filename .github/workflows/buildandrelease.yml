@@ -111,7 +111,7 @@ jobs:
         script: |
            cd ${{ env.AMI_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
            packer build -var github_sha=${{ github.sha }} aws-ami.json
-           echo "::set-env name=AMI_ID::$(aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github.sha }}" --query 'Images[*].[ImageId])"
+           echo "::set-env name=AMI_ID::$(aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github.sha }}" --query 'Images[*].[ImageId]' --output text)"
         
     - name: Create an EC2 instance from the new AMI
       uses: appleboy/ssh-action@master
