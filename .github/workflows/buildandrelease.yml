@@ -71,4 +71,4 @@ jobs:
         command_timeout: 10000s
         script: |
            echo ${{ env.AMI_ID }}
-           aws ec2 run-instances --image-id $AMI_ID --count 1 --instance-type t2.large --key-name releases-repo-key --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
+           aws ec2 run-instances --image-id ${{ AMI_ID }} --count 1 --instance-type t2.large --key-name releases-repo-key --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
