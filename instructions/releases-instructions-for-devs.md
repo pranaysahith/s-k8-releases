@@ -12,6 +12,6 @@ Releases are intended to deliver easy to use (and if possible plug-and-play) sol
 
 - Video instructions, especially for complex projects.
 
-- For projects that doesn't provide a service, but has to built/packaged, it's mandatory to have files required to build the artifact/package with docker.
+- For projects that doesn't provide a service, but has to build/package the project, it's mandatory to have files required to build the artifact/package with docker.
 
 
