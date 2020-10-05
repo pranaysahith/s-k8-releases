@@ -98,7 +98,7 @@ jobs:
         local: ${{ github.workspace }}/s-k8-releases
         remote: ${{ env.AMI_BUILD_DIR }}/s-k8-releases
 
-    - name: Build the AMI on a remote VM
+    - name: Build the AMI from a remote VM
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
