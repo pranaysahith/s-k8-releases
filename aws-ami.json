@@ -33,7 +33,7 @@
     {
       "type": "file",
       "source": "chrome-extension",
-      "destination":"/home/user/chrome-extension"
+      "destination":"/home/ubuntu/chrome-extension"
     },
     {
       "type": "shell",
