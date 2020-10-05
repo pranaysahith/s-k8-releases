@@ -47,7 +47,7 @@
         "type": "shell",
         "inline": [
          "cd chrome-extension/test/server",
-         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         "sudo -S -E su ubuntu -c 'docker-compose up -d'"
          ]
     }
   ]
