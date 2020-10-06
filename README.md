@@ -4,8 +4,9 @@
 ### Table of Contents
 * **[Releases](#Releases)**
 * **[Importing the OVA](#Importing-OVA)**
+* **[Cloning the Repo](#Cloning-the-Repo)**
 * **[Building the OVA](#Building-the-OVA)**
-* **[Building the AMI](#Building-the-AMI)**
+* **[Building AWS AMI](#Building-AWS-AMI)**
 * **[Continous Integration](#Continous-Integration)**
 
 
@@ -72,11 +73,46 @@ docker-compose up -d --force-recreate squid
 sudo reboot
 ```
 
+### Cloning the Repo
+
+Before start building the OVA or the AMI, you need to clone the repo and change your current directory
+
+``` bash
+git clone https://github.com/k8-proxy/s-k8-releases
+
+cd s-k8-releases/
+```
+
+
+### Building an OVA Base Image
+
+We need to create a base image to use it for the OVA new code deployment to fasten the process for creating a new OVA.
+
+#### Steps 
+
+* Clone the Repo as described **[here](#Cloning-the-Repo)**
+
+* And then build the image
+
+``` bash
+packer build base-image.json
+```
+
+* Create MD5sum for the produced image
+
+``` bash
+md5sum output-virtualbox-iso/glasswall-proxy-base-image.ova
+
+```
+* Capture the produced hash and replace checksum field with the new one in the reverse-proxy.json.
+
+
+**Note:** This step can be skipped if you previously created this on the same machine you are using i.e You already created the base image or downloaded it.
+
 ### Building the OVA
 
- docker-compose container from https://github.com/filetrust/k8-reverse-proxy/tree/master/upwork-devs/noureddine-yassin/reverse-proxy-icap-docker
 
-**Prepare Environment**
+#### Prepare Environment
 
 - Install Git for Windows (Default Settings) https://gitforwindows.org/ or a better option is to install to download and install Tortoisegit https://tortoisegit.org/download/
 - Install Virtual Box (Default Settings, You can not use Hyper-V): https://download.virtualbox.org/virtualbox/6.1.14/VirtualBox-6.1.14-140239-Win.exe
@@ -87,76 +123,45 @@ sudo reboot
 - Copy .exe from https://releases.hashicorp.com/packer/1.6.2/packer_1.6.2_windows_amd64.zip to c:\windows\system32
 
 
-**Build Steps**
+#### Build Steps
 
-Clone the Repo
+* Clone the Repo as described **[here](#Cloning-the-Repo)** **You can skip this if you already cloned the repo in the base image section**
 
-``` bash
-git clone https://github.com/k8-proxy/s-k8-releases
-```
-
-Change directory to the cloned project
-
-``` bash
-cd s-k8-releases/
-```
-
-Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+* Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
 git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
 
 ```
 
-Build the Image
+* Build the Image
 
 ``` bash
-packer build box.json
+packer build reverse-proxy.json
 ```
 
-After Successful build
-
-Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
+* After Successful build, Import the OVA file by going into the `output-virtualbox-iso` and Import the Image by **Double** clicking the ova file
 
 
 
-### Building the AMI
+### Building AWS AMI
 
-To create an AMI image with packer, you will need a programmatic access and a user with sufficient privileges. 
+* To create an AMI image with packer, you need a user with programmatic access and sufficient privileges. 
 
-For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
+    * For more details regarding AWS needed privileges check this [link](https://www.packer.io/docs/builders/amazon#iam-task-or-instance-role)
 
-You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+    * You also need to check the following links for configuring your AWS account and working with access keys [link1](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) [link2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
 
-Once you have done connecting your AWS account then we are ready to go for the next steps
+* Then you need to clone the Repo as described **[here](#Cloning-the-Repo)**
 
-Clone the Repo
-
-``` bash
-git clone https://github.com/k8-proxy/s-k8-releases
-```
-
-Change directory to the cloned project
-
-``` bash
-cd s-k8-releases/
-```
-
-Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
+* Clone the reverse proxy repo and tweak configuration files as described in k8-reverse-proxy/upwork-devs/noureddine-yassin/README.md.
 
 ```bash
 git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
 
 ```
 
-Create an archive from reverse-proxy icap repo
-
-```bash
-tar czvf revproxy.tar.gz -C k8-reverse-proxy/upwork-devs/noureddine-yassin/ reverse-proxy-icap-docker/	tar czvf revproxy.tar.gz -C k8-reverse-proxy/stable-src .
-```
-
-
-Build the Image
+* Build the Image
 
 ``` bash
 packer build ami.json

@@ -36,6 +36,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
            rm -rf ${{ env.VIRTUAL_BOX_PATH }} ${{ env.OVA_BUILD_DIR }}/*
+
     - name: copy code to the server
       uses: garygrossgarten/github-action-scp@release
       with:
@@ -55,8 +56,8 @@ jobs:
         command_timeout: 10000s
         script: |
            cd ${{ env.OVA_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
-           cd ${{ env.OVA_BUILD_DIR }}/s-k8-releases &&  git clone git@github.com:k8-proxy/chrome-extension.git
            packer build reverse-proxy.json 
+
     - name: Upload the OVA to S3
       uses: appleboy/ssh-action@master
       with:
@@ -88,6 +89,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
            rm -rf ${{ env.AMI_BUILD_DIR }}/*
+
   
     - name: copy code to the server
       uses: garygrossgarten/github-action-scp@release
@@ -98,7 +100,7 @@ jobs:
         local: ${{ github.workspace }}/s-k8-releases
         remote: ${{ env.AMI_BUILD_DIR }}/s-k8-releases
 
-    - name: Build the AMI from a remote VM
+    - name: Build the AMI on a remote VM
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -108,6 +110,16 @@ jobs:
         command_timeout: 10000s
         script: |
            cd ${{ env.AMI_BUILD_DIR }}/s-k8-releases &&  git clone --single-branch --branch develop --recursive https://github.com/k8-proxy/k8-reverse-proxy/
-           cd ${{ env.OVA_BUILD_DIR }}/s-k8-releases &&  git clone git@github.com:k8-proxy/chrome-extension.git
            packer build -var github_sha=${{ github.sha }} aws-ami.json
-           aws ec2 run-instances --image-id `aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github.sha }}" --query 'Images[*].[ImageId]' --output text` --count 1 --instance-type t2.large --key-name releases-repo-key --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'
+           echo "::set-env name=AMI_ID::$(aws ec2 describe-images --filters "Name=name,Values=glasswall-reverseproxy-${{ github.sha }}" --query 'Images[*].[ImageId]' --output text)"
+        
+    - name: Create an EC2 instance from the new AMI
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        timeout: 10000s
+        command_timeout: 10000s
+        script: |
+           aws ec2 run-instances --image-id $AMI_ID --count 1 --instance-type t2.large --key-name releases-repo-key --security-group-ids sg-00c842d3a9cb6a05d --tag-specifications 'ResourceType=instance, Tags=[{Key=Name,Value=glasswall-reverseproxy}]'

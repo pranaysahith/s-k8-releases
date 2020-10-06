@@ -1,0 +1,62 @@
+{
+    "variables": {
+      "version": "",
+      "iso": "/home/azureuser/base-image/output-virtualbox-iso/glasswall-proxy-base-image.ova",
+      "checksum": "9f8637277763d3b100d47f5daf18df40"
+
+    },
+    "provisioners": [
+  {
+      "type": "file",
+      "source": "chrome-extension",
+      "destination":"/home/user/chrome-extension"
+  },
+ {
+      "type": "file",
+      "source": "k8-reverse-proxy/stable-src",
+      "destination":"/home/user/reverse-proxy-icap-docker"
+  },
+ 
+  {
+        "type": "shell",
+        "inline": [
+         "cd reverse-proxy-icap-docker/",
+         "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
+        "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+         "cd chrome-extension/test/server",
+         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         ]
+    }],
+    "builders": [
+      {
+        "type": "virtualbox-ovf",
+        "boot_wait": "10s",
+        "headless": true,
+        "source_path": "{{ user `iso` }}",
+        "checksum": "md5:{{ user `checksum` }}",
+        "ssh_username": "user",
+        "ssh_password": "secret",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "1800s",
+        "shutdown_command": "echo 'secret'|sudo -S shutdown -P now",
+        "virtualbox_version_file": ".vbox_version",
+        "vm_name": "glasswall-proxy",
+        "format": "ova",
+        "vboxmanage_post": [
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--nic2",
+            "hostonly"
+          ]
+       ]
+
+      }
+    ]
+  }
+

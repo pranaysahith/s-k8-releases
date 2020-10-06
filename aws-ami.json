@@ -2,12 +2,13 @@
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "region": "eu-west-2"
+    "region": "eu-west-2",
+    "github_sha": null
   },
   "builders": [
     {
       "access_key": "{{user `aws_access_key`}}",
-      "ami_name": "glasswall-reverseproxy-{{timestamp}}",
+      "ami_name": "glasswall-reverseproxy-{{user `github_sha`}}",
       "instance_type": "t2.large",
       "region": "{{user `region`}}",
       "secret_key": "{{user `aws_secret_key`}}",
@@ -30,12 +31,24 @@
       "destination": "/home/ubuntu/reverse-proxy-icap-docker"
     },
     {
+      "type": "file",
+      "source": "chrome-extension",
+      "destination":"/home/ubuntu/chrome-extension"
+    },
+    {
       "type": "shell",
       "inline": [
         "cd reverse-proxy-icap-docker/",
         "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
         "sudo -S -E su ubuntu -c 'docker-compose up -d'"
       ]
+    },
+    {
+        "type": "shell",
+        "inline": [
+         "cd chrome-extension/test/server",
+         "sudo -S -E su ubuntu -c 'docker-compose up -d'"
+         ]
     }
   ]
 }
