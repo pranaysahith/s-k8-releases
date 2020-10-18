@@ -8,12 +8,12 @@
     "provisioners": [
         {
         "type":"shell",
-        "script":"ansible.sh",
+        "script":"scripts/ansible.sh",
         "expect_disconnect":true
         },
         {
         "type":"shell",
-        "script":"network.sh",
+        "script":"scripts/network.sh",
 	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
         },
 	{
@@ -25,6 +25,18 @@
         "type": "shell",
         "inline": [
          "cd chrome-extension/test/server",
+         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         ]
+    	},
+	{
+        "type": "file",
+        "source": "k8-test-data",
+        "destination":"/home/user/k8-test-data"
+ 	 },
+	 {
+        "type": "shell",
+        "inline": [
+         "cd k8-test-data/",
          "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
          ]
     	}

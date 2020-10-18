@@ -28,7 +28,7 @@
     "provisioners": [
         {
         "type":"shell",
-        "script":"ansible.sh",
+        "script":"scripts/ansible.sh",
         "expect_disconnect":true
         },
         {
