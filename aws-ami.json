@@ -46,7 +46,20 @@
          "cd chrome-extension/test/server",
          "sudo -S -E su ubuntu -c 'docker-compose up -d'"
          ]
-       }
+       },
+        {
+        "type": "file",
+        "source": "k8-test-data",
+        "destination":"/home/user/k8-test-data"
+         },
+         {
+        "type": "shell",
+        "inline": [
+         "cd k8-test-data/",
+         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         ]
+        }
+
     ]
 }
 
