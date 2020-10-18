@@ -1,8 +1,8 @@
 {
     "variables": {
       "version": "",
-      "iso": "/home/azureuser/base-image/output-virtualbox-iso/glasswall-k8s-base",
-      "checksum": "9f8637277763d3b100d47f5daf18df40"
+      "iso": "/home/azureuser/base-image/output-virtualbox-iso/glasswall-k8s-base.ova",
+      "checksum": "3b5e507fb5e1096c733afb174d1b4591"
 
     },
     "provisioners": [
@@ -15,6 +15,11 @@
         "type":"shell",
         "script":"scripts/network.sh",
 	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+
+        {
+        "type":"shell",
+        "script":"scripts/install.sh"
         },
 	{
         "type": "file",

@@ -32,6 +32,10 @@
         "expect_disconnect":true
         },
         {
+        "type":"shell",
+        "script":"scripts/install.sh"
+        },
+        {
        "type": "file",
        "source": "chrome-extension",
        "destination":"/home/ubuntu/chrome-extension"
