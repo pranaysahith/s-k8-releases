@@ -30,7 +30,7 @@
         "type": "shell",
         "inline": [
          "cd chrome-extension/test/server",
-         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         "sudo docker-compose up -d"
          ]
     	},
 	{
@@ -42,7 +42,7 @@
         "type": "shell",
         "inline": [
          "cd k8-test-data/",
-         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         "sudo docker-compose up -d"
          ]
     	}
        ],
@@ -57,7 +57,7 @@
         "ssh_password": "secret",
         "ssh_port": 22,
         "ssh_wait_timeout": "1800s",
-        "shutdown_command": "echo 'secret' | sudo -S shutdown -P now",
+        "shutdown_command": "sudo shutdown -P now",
         "vm_name": "glasswall-k8s",
         "format": "ova",
         "vboxmanage": [

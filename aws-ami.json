@@ -44,7 +44,7 @@
         "type": "shell",
         "inline": [
          "cd chrome-extension/test/server",
-         "sudo -S -E su ubuntu -c 'docker-compose up -d'"
+         "sudo docker-compose up -d"
          ]
        },
         {
@@ -56,7 +56,7 @@
         "type": "shell",
         "inline": [
          "cd k8-test-data/",
-         "echo 'secret' | sudo -S -E su user -c 'docker-compose up -d'"
+         "sudo docker-compose up -d"
          ]
         }
 
