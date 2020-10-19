@@ -50,16 +50,8 @@
         {
         "type": "file",
         "source": "k8-test-data",
-        "destination":"/home/user/k8-test-data"
-         },
-         {
-        "type": "shell",
-        "inline": [
-         "cd k8-test-data/",
-         "sudo docker-compose up -d"
-         ]
-        }
-
+        "destination":"/home/ubuntu/k8-test-data"
+         }
     ]
 }
 
