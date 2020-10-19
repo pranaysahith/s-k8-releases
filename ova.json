@@ -8,7 +8,7 @@
     "provisioners": [
         {
         "type":"shell",
-        "script":"scripts/ansible.sh",
+        "script":"scripts/install-kubespray.sh",
         "expect_disconnect":true
         },
         {
@@ -19,25 +19,30 @@
 
         {
         "type":"shell",
-        "script":"scripts/install.sh"
+        "script":"scripts/install-docker-compose.sh"
         },
 	{
         "type": "file",
         "source": "chrome-extension",
         "destination":"/home/user/chrome-extension"
  	 },
-	 {
-        "type": "shell",
-        "inline": [
-         "cd chrome-extension/test/server",
-         "sudo docker-compose up -d"
-         ]
-    	},
 	{
         "type": "file",
         "source": "k8-test-data",
         "destination":"/home/user/k8-test-data"
- 	 }
+ 	 },
+        {
+        "type":"shell",
+        "script":"scripts/install-helm.sh"
+	},
+        {
+        {
+        "type":"shell",
+        "script":"scripts/compose-up.sh"
+	},
+        "type":"shell",
+        "script":"scripts/deploy-reverse-proxy.sh"
+	}
        ],
     "builders": [
       {
