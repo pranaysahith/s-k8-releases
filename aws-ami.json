@@ -12,7 +12,7 @@
       "instance_type": "t3.large",
       "region": "{{user `region`}}",
       "secret_key": "{{user `aws_secret_key`}}",
-      "source_ami": "ami-06868ad5a3642e4d7",
+      "source_ami": "ami-09a1e275e350acf38",
       "ssh_username": "ubuntu",
       "ssh_timeout": "10m",
       "type": "amazon-ebs",
