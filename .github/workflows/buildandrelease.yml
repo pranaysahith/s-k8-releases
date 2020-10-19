@@ -67,8 +67,8 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         timeout: 1000s
         script: |
-           mv ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy.ova ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova
-           aws s3 cp ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-proxy-${{ github.sha }}.ova s3://glasswall-proxy-ova/
+           mv ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-k8s.ova ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-k8s-${{ github.sha }}.ova
+           aws s3 cp ${{ env.OVA_BUILD_DIR }}/s-k8-releases/${{ env.OVA_OUTPUT_DIR }}/glasswall-k8s-${{ github.sha }}.ova s3://glasswall-proxy-ova/
           
   build-and-release-AMI:
     # The type of runner that the job will run on
