@@ -36,10 +36,10 @@
         "script":"scripts/install-helm.sh"
 	},
         {
-        {
         "type":"shell",
         "script":"scripts/compose-up.sh"
 	},
+	{
         "type":"shell",
         "script":"scripts/deploy-reverse-proxy.sh"
 	}
