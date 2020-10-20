@@ -14,7 +14,7 @@
       "secret_key": "{{user `aws_secret_key`}}",
       "source_ami": "ami-09a1e275e350acf38",
       "ssh_username": "ubuntu",
-      "ssh_timeout": "10m",
+      "ssh_timeout": "20m",
       "type": "amazon-ebs",
       "launch_block_device_mappings": [
         {

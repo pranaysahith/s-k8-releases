@@ -4,7 +4,7 @@
 
 # Run chrome extension backend
 
-sudo docker-compose -f chrome-extension/test/server/docker-compose.yml up -d 
+sudo docker-compose -f chrome-extension/test/server/docker-compose.yml up -d || true 
 
 
 # Run Test Data docker compose file
