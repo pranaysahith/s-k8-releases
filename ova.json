@@ -1,0 +1,86 @@
+{
+    "variables": {
+      "version": "",
+      "iso": "/home/azureuser/base-image/output-virtualbox-iso/glasswall-k8s-base.ova",
+      "checksum": "3b5e507fb5e1096c733afb174d1b4591"
+
+    },
+    "provisioners": [
+        {
+        "type":"shell",
+        "script":"scripts/install-kubespray.sh",
+        "expect_disconnect":true
+        },
+        {
+        "type":"shell",
+        "script":"scripts/network.sh",
+	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+
+        {
+        "type":"shell",
+        "script":"scripts/install-docker-compose.sh"
+        },
+	{
+        "type": "file",
+        "source": "chrome-extension",
+        "destination":"/home/user/chrome-extension"
+ 	 },
+	{
+        "type": "file",
+        "source": "k8-test-data",
+        "destination":"/home/user/k8-test-data"
+ 	 },
+        {
+        "type":"shell",
+        "script":"scripts/install-helm.sh"
+	},
+        {
+        "type":"shell",
+        "script":"scripts/compose-up.sh"
+	},
+	{
+        "type":"shell",
+        "script":"scripts/deploy-reverse-proxy.sh"
+	}
+       ],
+    "builders": [
+      {
+        "type": "virtualbox-ovf",
+        "boot_wait": "10s",
+        "headless": true,
+	"source_path": "{{ user `iso` }}",
+        "checksum": "md5:{{ user `checksum` }}",
+        "ssh_username": "user",
+        "ssh_password": "secret",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "1800s",
+        "shutdown_command": "sudo shutdown -P now",
+        "vm_name": "glasswall-k8s",
+        "format": "ova",
+        "vboxmanage": [
+          [
+		"modifyvm",
+		"{{.Name}}",
+		"--memory",
+		"4096"
+	  ],
+         [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--cpus",
+		    "2"
+          ]
+        ],
+        "vboxmanage_post": [
+		  [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--nic2",
+		    "hostonly"
+		  ]
+
+       ]
+      }
+    ]
+  }

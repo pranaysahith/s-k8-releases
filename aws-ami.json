@@ -8,48 +8,56 @@
   "builders": [
     {
       "access_key": "{{user `aws_access_key`}}",
-      "ami_name": "glasswall-reverseproxy-{{user `github_sha`}}",
-      "instance_type": "t2.large",
+      "ami_name": "glasswall-k8s-{{user `github_sha`}}",
+      "instance_type": "t3.large",
       "region": "{{user `region`}}",
       "secret_key": "{{user `aws_secret_key`}}",
-      "source_ami": "ami-00db2b50b3b025163",
+      "source_ami": "ami-09a1e275e350acf38",
       "ssh_username": "ubuntu",
-      "ssh_timeout": "10m",
-      "type": "amazon-ebs"
+      "ssh_timeout": "20m",
+      "type": "amazon-ebs",
+      "launch_block_device_mappings": [
+        {
+          "device_name": "/dev/sda1",
+          "volume_type": "gp2",
+          "delete_on_termination": true
+        }
+      ]
     }
   ],
-  "provisioners": [
-    {
-      "type": "shell",
-      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}' ubuntu",
-      "script": "scripts/install.sh",
-      "pause_before": "10s"
-    },
-    {
-      "type": "file",
-      "source": "k8-reverse-proxy/stable-src",
-      "destination": "/home/ubuntu/reverse-proxy-icap-docker"
-    },
-    {
-      "type": "file",
-      "source": "chrome-extension",
-      "destination":"/home/ubuntu/chrome-extension"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "cd reverse-proxy-icap-docker/",
-        "wget -O c-icap/Glasswall-Rebuild-SDK-Evaluation/Linux/Library/libglasswall.classic.so https://raw.githubusercontent.com/filetrust/Glasswall-Rebuild-SDK-Evaluation/master/Linux/Library/libglasswall.classic.so",
-        "sudo -S -E su ubuntu -c 'docker-compose up -d'"
-      ]
-    },
-    {
-        "type": "shell",
-        "inline": [
-         "cd chrome-extension/test/server",
-         "sudo -S -E su ubuntu -c 'docker-compose up -d'"
-         ]
-    }
-  ]
+    "provisioners": [
+        {
+        "type":"shell",
+        "script":"scripts/install-kubespray.sh",
+        "expect_disconnect":true
+        },
+        {
+        "type":"shell",
+        "script":"scripts/install-docker-compose.sh"
+        },
+        {
+       "type": "file",
+       "source": "chrome-extension",
+       "destination":"/home/ubuntu/chrome-extension"
+       },
+        {
+        "type": "file",
+        "source": "k8-test-data",
+        "destination":"/home/ubuntu/k8-test-data"
+        },
+        {
+        "type":"shell",
+        "script":"scripts/install-helm.sh"
+        },
+        {
+        "type":"shell",
+        "script":"scripts/compose-up.sh"
+        },
+	{
+	"type":"shell",
+        "script":"scripts/deploy-reverse-proxy.sh"
+        }
+
+    ]
 }
 
