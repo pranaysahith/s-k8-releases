@@ -1,0 +1,64 @@
+{
+    "variables": {
+      "version": "",
+      "iso": "/home/ubuntu/s-k8-releases/output-virtualbox-iso/glasswall-k8s-base.ova",
+      "checksum": "aa977cafb32b139d0013430fb2be2c1e"
+
+    },
+    "provisioners": [
+        {
+        "type":"shell",
+        "script":"scripts/network.sh",
+	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+        {
+        "type":"shell",
+        "script":"scripts/install-docker.sh",
+        "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+        {
+        "type": "shell",
+        "script": "scripts/install-minio.sh",
+        "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        }
+       ],
+    "builders": [
+      {
+        "type": "virtualbox-ovf",
+        "boot_wait": "10s",
+        "headless": true,
+	"source_path": "{{ user `iso` }}",
+        "checksum": "md5:{{ user `checksum` }}",
+        "ssh_username": "user",
+        "ssh_password": "secret",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "1800s",
+        "shutdown_command": "sudo shutdown -P now",
+        "vm_name": "glasswall-minio",
+        "format": "ova",
+        "vboxmanage": [
+          [
+		"modifyvm",
+		"{{.Name}}",
+		"--memory",
+		"4096"
+	  ],
+         [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--cpus",
+		    "2"
+          ]
+        ],
+        "vboxmanage_post": [
+		  [
+		    "modifyvm",
+		    "{{.Name}}",
+		    "--nic2",
+		    "hostonly"
+		  ]
+
+       ]
+      }
+    ]
+  }
