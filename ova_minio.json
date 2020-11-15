@@ -2,19 +2,24 @@
     "variables": {
       "version": "",
       "iso": "/home/ubuntu/s-k8-releases/output-virtualbox-iso/glasswall-k8s-base.ova",
-      "checksum": "aa977cafb32b139d0013430fb2be2c1e"
+      "checksum": "5bf11c5a92bcdd7d2771c9bcf6ecc103"
 
     },
     "provisioners": [
         {
         "type":"shell",
         "script":"scripts/network.sh",
-	"execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+	      "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
         },
         {
         "type":"shell",
         "script":"scripts/install-docker.sh",
         "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+        {
+        "type":"shell",
+        "script":"scripts/install-docker-compose.sh",
+        "execute_command":"echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
         },
         {
         "type": "shell",
@@ -41,13 +46,13 @@
 		"modifyvm",
 		"{{.Name}}",
 		"--memory",
-		"4096"
+		"2048"
 	  ],
          [
 		    "modifyvm",
 		    "{{.Name}}",
 		    "--cpus",
-		    "2"
+		    "1"
           ]
         ],
         "vboxmanage_post": [

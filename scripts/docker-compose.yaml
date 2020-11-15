@@ -1,0 +1,14 @@
+version: "3.0"
+services:
+  sourceminio:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: user
+      MINIO_SECRET_KEY: secret_password
+    ports:
+      - "9000:9000"
+    volumes:
+      - minio:/data
+volumes:
+  minio:
