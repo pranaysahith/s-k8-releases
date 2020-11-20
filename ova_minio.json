@@ -2,7 +2,7 @@
     "variables": {
       "version": "",
       "iso": "/home/ubuntu/s-k8-releases/output-virtualbox-iso/glasswall-k8s-base.ova",
-      "checksum": "5bf11c5a92bcdd7d2771c9bcf6ecc103"
+      "checksum": "b42661a09eeb16f354b9fddf421dfb35"
 
     },
     "provisioners": [
@@ -20,6 +20,11 @@
         "type": "shell",
         "script": "scripts/install-minio.sh",
         "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+        },
+        {
+        "type": "shell",
+        "script": "scripts/post-build.sh",
+        "execute_command": "echo 'secret' | {{.Vars}} sudo -S -E bash '{{.Path}}' 192.168.56.90/24"
         }
        ],
     "builders": [
@@ -27,7 +32,7 @@
         "type": "virtualbox-ovf",
         "boot_wait": "10s",
         "headless": true,
-	"source_path": "{{ user `iso` }}",
+	      "source_path": "{{ user `iso` }}",
         "checksum": "md5:{{ user `checksum` }}",
         "ssh_username": "user",
         "ssh_password": "secret",
@@ -38,25 +43,31 @@
         "format": "ova",
         "vboxmanage": [
           [
-		"modifyvm",
-		"{{.Name}}",
-		"--memory",
-		"2048"
-	  ],
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+          ],
          [
-		    "modifyvm",
-		    "{{.Name}}",
-		    "--cpus",
-		    "1"
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
           ]
         ],
         "vboxmanage_post": [
-		  [
-		    "modifyvm",
-		    "{{.Name}}",
-		    "--nic2",
-		    "hostonly"
-		  ]
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--nic1",
+            "nat"
+          ],
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--nic2",
+            "hostonly"
+          ]
 
        ]
       }
